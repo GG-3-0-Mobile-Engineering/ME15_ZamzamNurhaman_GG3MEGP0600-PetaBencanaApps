@@ -3,9 +3,16 @@ package com.example.petabencana
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -23,6 +30,18 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val buttonSetting = findViewById<ImageButton>(R.id.button_setting)
+        val cardContainer = findViewById<CardView>(R.id.cardViewContainer)
+        cardContainer.setOnClickListener {
+            Log.i("BUTTON CONTAINER", "BUTTON DI CLICK")
+        }
+
+        buttonSetting.setOnClickListener {
+            Log.i("BUTTON SETTING", "Button click")
+        }
+
+        WindowCompat.setDecorFitsSystemWindows( window, false )
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -68,6 +87,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.mapType = GoogleMap.MAP_TYPE_NORMAL
         getCurrentLocation()
     }
 }
