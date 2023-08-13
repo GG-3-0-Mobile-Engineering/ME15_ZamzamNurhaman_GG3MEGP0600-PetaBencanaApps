@@ -8,10 +8,11 @@ data class ApiResponse(
 
 data class Result(
     val type : String,
-    val features : ArrayList<Feature>? = null
+    @SerializedName("features")
+    val reports : List<Report>? = null
 )
 
-data class Feature(
+data class Report(
     val type: String,
     val geometry: Geometry,
     val properties: Properties
@@ -33,7 +34,7 @@ data class Properties (
     val url: String,
 
     @SerializedName("image_url")
-    val imageURL: String,
+    val imageURL: String? = null,
 
     @SerializedName("disaster_type")
     val disasterType: String,
@@ -42,7 +43,7 @@ data class Properties (
     val reportData: ReportData,
 
     val tags: Tags,
-    val title: String? = null,
+    val title: String?,
     val text: String,
 
     @SerializedName("partner_code")

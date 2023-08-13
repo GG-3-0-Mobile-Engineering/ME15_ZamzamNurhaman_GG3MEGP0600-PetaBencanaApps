@@ -9,6 +9,6 @@ interface DisasterApi {
     fun getReports(
         @Query("timeperiod") timeperiod: Int? = 604800,
         @Query("geoformat") geoFormat: String? = "geojson",
-        @Query("admin") admin: String
+//        @Query("admin") admin: String? = "ID-JK"
     ): Call<ApiResponse>
 }
