@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petabencana.R
+import com.example.petabencana.api.Report
 import com.example.petabencana.databinding.FragmentReportsBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -51,13 +52,26 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(gMaps: GoogleMap) {
         gMaps.clear()
-        val latlang = LatLng(-6.901733255898841, 107.61896566917964)
-        gMaps.animateCamera(CameraUpdateFactory.newLatLngZoom(latlang, 8f))
-        val markerOpt = MarkerOptions()
-            .position(latlang)
-            .title("My Location")
+        viewModel.reports.observe(viewLifecycleOwner){
 
-        gMaps.addMarker(markerOpt)
+            val dataReport = it
+            val coordinate = dataReport[0].geometry.coordinates
+            val positionFirsReport = LatLng(coordinate[1], coordinate[0] )
+            gMaps.animateCamera(CameraUpdateFactory.newLatLngZoom(positionFirsReport, 8f))
+
+            for (report : Report in dataReport){
+                val header = report.properties.disasterType
+                val position = LatLng(report.geometry.coordinates[1],report.geometry.coordinates[0])
+
+                val markerOpt = MarkerOptions()
+                    .position(position)
+                    .title(report.properties.title ?: "Bencana")
+                    .snippet(header)
+
+                gMaps.addMarker(markerOpt)
+            }
+        }
+
     }
 
 }
