@@ -1,4 +1,4 @@
-package com.example.petabencana.api
+package com.example.petabencana.data.dataSource.remote
 
 import retrofit2.Call
 import retrofit2.http.GET
@@ -9,6 +9,6 @@ interface DisasterApi {
     fun getReports(
         @Query("timeperiod") timeperiod: Int? = 604800,
         @Query("geoformat") geoFormat: String? = "geojson",
-//        @Query("admin") admin: String? = "ID-JK"
+        @Query("admin") province: String? = null
     ): Call<ApiResponse>
 }

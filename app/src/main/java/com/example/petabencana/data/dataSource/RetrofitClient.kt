@@ -1,14 +1,16 @@
-package com.example.petabencana.api
+package com.example.petabencana.data.dataSource
 
+import com.example.petabencana.data.dataSource.remote.DisasterApi
+import com.example.petabencana.utils.Constants
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASEURL = "https://data.petabencana.id/"
+
 
     val instance: DisasterApi by lazy {
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASEURL)
+            .baseUrl(Constants.BASEURL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

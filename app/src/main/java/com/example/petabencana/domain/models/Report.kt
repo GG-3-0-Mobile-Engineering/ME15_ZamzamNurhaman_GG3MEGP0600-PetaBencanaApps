@@ -1,16 +1,6 @@
-package com.example.petabencana.api
+package com.example.petabencana.domain.models
 
 import com.google.gson.annotations.SerializedName
-
-data class ApiResponse(
-    val  result : Result
-)
-
-data class Result(
-    val type : String,
-    @SerializedName("features")
-    val reports : List<Report>? = null
-)
 
 data class Report(
     val type: String,
@@ -74,4 +64,3 @@ data class Tags (
     @SerializedName("instance_region_code")
     val instanceRegionCode: String
 )
-

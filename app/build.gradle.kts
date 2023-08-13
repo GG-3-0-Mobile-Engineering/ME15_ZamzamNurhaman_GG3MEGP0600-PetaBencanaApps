@@ -65,6 +65,8 @@ dependencies {
     implementation(libs.androidx.baseLibrary)
     implementation(libs.androidx.navigation.ui)
     implementation(libs.glide)
+    implementation(libs.lifecycle.livedata.ktx)
+    implementation(libs.lifecycle.viewmodel.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)

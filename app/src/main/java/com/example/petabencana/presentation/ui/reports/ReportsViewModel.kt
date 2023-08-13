@@ -1,13 +1,13 @@
-package com.example.petabencana.ui.reports
+package com.example.petabencana.presentation.ui.reports
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.petabencana.api.ApiResponse
-import com.example.petabencana.api.Report
-import com.example.petabencana.api.RetrofitClient
+import com.example.petabencana.data.dataSource.remote.ApiResponse
+import com.example.petabencana.data.dataSource.RetrofitClient
+import com.example.petabencana.domain.models.Report
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,32 +21,32 @@ class ReportsViewModel : ViewModel() {
     private val _reports = MutableLiveData<List<Report>>()
     private val _status = MutableLiveData<ReportApiStatus>()
 
-    val reports: LiveData<List<Report>> = _reports
-    val status: LiveData<ReportApiStatus> = _status
+    val reports: LiveData<List<Report>> get() = _reports
+    val status: LiveData<ReportApiStatus> get() = _status
     init {
-        Log.d("RESPONSE", "INIT")
         getReports()
     }
 
 
-    private fun getReports(){
-        Log.d("RESPONSE", "GET REPORTS")
+    fun getReports(newProvince :String?=null){
+
         viewModelScope.launch {
             _status.value = ReportApiStatus.LOADING
             try {
-                 RetrofitClient.instance.getReports().enqueue(object :Callback<ApiResponse>{
+                 RetrofitClient.instance.getReports(province = newProvince ?: "ID-JK").enqueue(object :Callback<ApiResponse>{
                     override fun onResponse(
                         call: Call<ApiResponse>,
                         response: Response<ApiResponse>
                     ) {
                         if(response.isSuccessful){
-                            Log.d("RESPONSE", response.body().toString())
+                            _status.value = ReportApiStatus.DONE
                             _reports.value = response.body()?.result?.reports ?: emptyList()
                         }
                     }
 
                     override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
-                        Log.e("Response" , t.message.toString())
+                        Log.e("RESPONSE" , t.message.toString())
+                        _status.value = ReportApiStatus.ERROR
                     }
 
                 })
