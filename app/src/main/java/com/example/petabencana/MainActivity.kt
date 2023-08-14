@@ -1,17 +1,24 @@
 package com.example.petabencana
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.petabencana.data.datasource.local.Preferences
 import com.example.petabencana.databinding.ActivityMainBinding
+import com.example.petabencana.presentation.ui.setting.SettingViewModel
+import com.example.petabencana.utils.helper.ThemeHelper
 
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private val viewModel: SettingViewModel by viewModels<SettingViewModel> {
+        SettingViewModel.factory(Preferences(this))
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -22,6 +29,13 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.navigation_fragment) as NavHostFragment
         navController = navHostFragment.navController
 //        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        viewModel.isDarkTheme().observe(this) { isDarkMode ->
+            when (isDarkMode) {
+                true -> ThemeHelper.enableDarkTheme()
+                else -> ThemeHelper.disableDarkTheme()
+            }
+        }
 
     }
 

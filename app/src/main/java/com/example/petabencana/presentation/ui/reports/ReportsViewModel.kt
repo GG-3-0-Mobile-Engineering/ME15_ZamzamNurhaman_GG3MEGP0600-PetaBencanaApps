@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.petabencana.data.dataSource.remote.ApiResponse
-import com.example.petabencana.data.dataSource.RetrofitClient
+import com.example.petabencana.data.datasource.remote.ApiResponse
+import com.example.petabencana.data.datasource.RetrofitClient
 import com.example.petabencana.domain.models.Report
 import kotlinx.coroutines.launch
 import retrofit2.Call

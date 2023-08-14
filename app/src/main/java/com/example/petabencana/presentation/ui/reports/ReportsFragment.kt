@@ -14,14 +14,11 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petabencana.R
 import com.example.petabencana.databinding.FragmentReportsBinding
-import com.example.petabencana.databinding.FragmentSettingBinding
 import com.example.petabencana.domain.models.Report
-import com.example.petabencana.presentation.ui.setting.SettingFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -66,12 +63,12 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
             view.findNavController().navigate(action)
         }
 
-        _binding.autoCompleteTextView.setOnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE && v.text.isNotEmpty()) {
+        _binding.autoCompleteTextView.setOnEditorActionListener { textView, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE && textView.text.isNotEmpty()) {
                 val text = _binding.autoCompleteTextView.text.toString()
                 province = text
                 val keyboard = requireActivity().getSystemService(InputMethodManager::class.java)
-                keyboard.hideSoftInputFromWindow(v.windowToken, 0)
+                keyboard.hideSoftInputFromWindow(textView.windowToken, 0)
 
                 viewModel.getReports(province)
 

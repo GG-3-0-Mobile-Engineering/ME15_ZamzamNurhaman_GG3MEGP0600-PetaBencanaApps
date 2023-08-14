@@ -1,4 +1,4 @@
-package com.example.petabencana.data.dataSource.remote
+package com.example.petabencana.data.datasource.remote
 
 import com.example.petabencana.domain.models.Report
 import com.google.gson.annotations.SerializedName

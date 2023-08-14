@@ -1,4 +1,4 @@
-package com.example.petabencana.data.dataSource.remote
+package com.example.petabencana.data.datasource.remote
 
 import retrofit2.Call
 import retrofit2.http.GET
