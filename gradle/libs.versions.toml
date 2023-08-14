@@ -29,6 +29,7 @@ androidx-navigationUi = "2.7.0"
 glide = "4.15.1"
 
 [libraries]
+androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation-fragment" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version = "1.10.1" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }

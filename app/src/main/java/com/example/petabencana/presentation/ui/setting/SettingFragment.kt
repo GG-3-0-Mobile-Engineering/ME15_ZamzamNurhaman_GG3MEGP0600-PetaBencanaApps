@@ -10,9 +10,6 @@ import com.example.petabencana.R
 
 class SettingFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = SettingFragment()
-    }
 
     private lateinit var viewModel: SettingViewModel
 
@@ -23,10 +20,6 @@ class SettingFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_setting, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SettingViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
+
 
 }

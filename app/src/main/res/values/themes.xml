@@ -4,11 +4,11 @@
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="backgroundColor">@color/bg_light</item>
-<!--        <item name="android:statusBarColor">@color/primary</item>-->
+        <item name="android:statusBarColor">@color/primary</item>
 
-        <item name="android:windowTranslucentStatus">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+<!--        <item name="android:windowTranslucentStatus">false</item>-->
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
+<!--        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>-->
     </style>
 
     <style name="Theme.PetaBencana" parent="Base.Theme.PetaBencana" />

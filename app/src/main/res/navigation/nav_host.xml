@@ -8,7 +8,19 @@
     <fragment
         android:id="@+id/reportsFragment"
         android:name="com.example.petabencana.presentation.ui.reports.ReportsFragment"
-        android:label="ReportsFragment"
-        tools:layout="@layout/fragment_reports"
-        />
+        tools:layout="@layout/fragment_reports">
+        <action
+            android:id="@+id/action_reportsFragment_to_settingFragment"
+            app:destination="@id/settingFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.petabencana.presentation.ui.setting.SettingFragment"
+        android:label="Pengaturan"
+        tools:layout="@layout/fragment_setting" />
 </navigation>

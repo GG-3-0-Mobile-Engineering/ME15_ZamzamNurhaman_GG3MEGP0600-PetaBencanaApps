@@ -24,21 +24,21 @@
             android:drawablePadding="10dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="70dp"
+            android:layout_marginTop="50dp"
             android:paddingVertical="10dp"
             android:paddingHorizontal="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_search"
+            app:layout_constraintEnd_toStartOf="@+id/btn_setting"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="JAKARTA"
             android:background="@drawable/bg_search_view"
             android:inputType="text"
-            android:imeOptions="actionDone"
+        android:imeOptions="actionDone"
             android:hint="Cari daerah .."
             />
 
         <ImageView
-            android:id="@+id/btn_search"
+            android:id="@+id/btn_setting"
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/bg_btn_search"
@@ -95,11 +95,12 @@
                 android:id="@+id/close_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:importantForAccessibility="no"
                 android:src="@drawable/close_icon"
                 android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/textviewOffset"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/arrow_up_icon" />
+                app:layout_constraintTop_toBottomOf="@id/arrow_up_icon"
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/textviewOffset"
@@ -116,7 +117,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="70dp"
-                android:layout_marginBottom="50dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintTop_toBottomOf="@id/textviewOffset"
                 tools:listitem="@layout/card_report">

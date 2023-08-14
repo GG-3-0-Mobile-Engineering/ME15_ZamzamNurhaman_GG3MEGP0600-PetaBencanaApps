@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.com.google.android.libraries.mapsplatform.secrets.gradle.plugin)
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs")
+
 }
 
 android {
@@ -59,11 +62,11 @@ dependencies {
     implementation(libs.legacy.support.v4)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.fragment)
+    implementation(libs.androidx.navigation.ui)
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.coil)
     implementation(libs.livedata)
     implementation(libs.androidx.baseLibrary)
-    implementation(libs.androidx.navigation.ui)
     implementation(libs.glide)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)

@@ -21,6 +21,7 @@ class ReportsAdapter(private val list: List<Report>) : RecyclerView.Adapter<Repo
             }else{
                 Glide.with(binding.root).load(report.properties.imageURL).into(binding.newsImage)
             }
+
         }
 
     }
