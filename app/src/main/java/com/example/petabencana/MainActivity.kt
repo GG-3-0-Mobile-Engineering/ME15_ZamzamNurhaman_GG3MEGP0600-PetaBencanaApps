@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.example.petabencana.data.datasource.local.Preferences
+import com.example.petabencana.data.datasource.local.ThemePreferences
 import com.example.petabencana.databinding.ActivityMainBinding
 import com.example.petabencana.presentation.ui.setting.SettingViewModel
 import com.example.petabencana.utils.helper.ThemeHelper
@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val viewModel: SettingViewModel by viewModels<SettingViewModel> {
-        SettingViewModel.factory(Preferences(this))
+        SettingViewModel.factory(ThemePreferences(this))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

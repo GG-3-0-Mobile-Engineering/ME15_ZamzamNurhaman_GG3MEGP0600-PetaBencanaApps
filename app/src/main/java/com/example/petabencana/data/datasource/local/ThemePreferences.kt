@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 private val Context.prefDataStore by preferencesDataStore("settings")
-class Preferences constructor(context:Context) {
+class ThemePreferences constructor(context:Context) {
 
     private val settingPreferences = context.prefDataStore
     private val IS_DARK_MODE = booleanPreferencesKey("is_dark_mode")

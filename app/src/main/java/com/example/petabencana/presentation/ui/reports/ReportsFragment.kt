@@ -17,8 +17,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petabencana.R
+import com.example.petabencana.data.datasource.local.ThemePreferences
 import com.example.petabencana.databinding.FragmentReportsBinding
 import com.example.petabencana.domain.models.Report
+import com.example.petabencana.presentation.ui.setting.SettingViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -26,11 +28,15 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class ReportsFragment : Fragment(), OnMapReadyCallback {
     private val viewModel: ReportsViewModel by viewModels()
+    private val settingViewModel: SettingViewModel by viewModels<SettingViewModel> {
+        SettingViewModel.factory(ThemePreferences(requireActivity()))
+    }
     private lateinit var _binding: FragmentReportsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var gMaps: GoogleMap
@@ -50,7 +56,7 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       handleBottomSheet()
+        handleBottomSheet()
 
         //maps
         val mapsFragment = childFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment
@@ -105,7 +111,7 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
 
     }
 
-   private fun handleBottomSheet(){
+    private fun handleBottomSheet() {
         val layoutSheet = _binding.bottomSheetLayout
         val arrowUpButton = _binding.arrowUpIcon
         val closeIcon = _binding.closeIcon
@@ -119,11 +125,12 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
                 sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
 
             } else {
-                closeIcon.setOnClickListener {
-                    sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                }
                 sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
             }
+        }
+
+        closeIcon.setOnClickListener {
+            sheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
         sheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -184,13 +191,29 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(googleMaps: GoogleMap) {
         gMaps = googleMaps
         getCurrentLocation()
+        settingViewModel.isDarkTheme().observe(viewLifecycleOwner) { isDarkMode ->
+            when (isDarkMode) {
+                true -> gMaps.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        requireActivity(),
+                        R.raw.map_style_dark
+                    )
+                )
+                else -> gMaps.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                        requireActivity(),
+                        R.raw.map_style_light
+                    )
+                )
+            }
+        }
         viewModel.reports.observe(viewLifecycleOwner) {
             gMaps.clear()
 
             val dataReport = it
-            if(_binding.autoCompleteTextView.text!!.isNotEmpty()){
+            if (_binding.autoCompleteTextView.text!!.isNotEmpty()) {
                 val coordinate = dataReport[0].geometry.coordinates
-                val positionFirsReport = LatLng(coordinate[1], coordinate[0] )
+                val positionFirsReport = LatLng(coordinate[1], coordinate[0])
                 gMaps.animateCamera(CameraUpdateFactory.newLatLngZoom(positionFirsReport, 8f))
             }
             for (report: Report in dataReport) {

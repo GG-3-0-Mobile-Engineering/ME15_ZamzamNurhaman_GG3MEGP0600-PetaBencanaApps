@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.petabencana.data.datasource.local.Preferences
+import com.example.petabencana.data.datasource.local.ThemePreferences
 import com.example.petabencana.databinding.FragmentSettingBinding
 import com.example.petabencana.utils.helper.ThemeHelper
 
@@ -16,7 +16,7 @@ class SettingFragment : Fragment() {
 
 
     private val viewModel: SettingViewModel by viewModels<SettingViewModel>{
-        SettingViewModel.factory(Preferences(requireActivity()))
+        SettingViewModel.factory(ThemePreferences(requireActivity()))
     }
     private lateinit var _binding: FragmentSettingBinding
 
