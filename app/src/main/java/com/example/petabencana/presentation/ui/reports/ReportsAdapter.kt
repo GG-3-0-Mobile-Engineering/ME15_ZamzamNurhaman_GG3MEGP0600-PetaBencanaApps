@@ -1,5 +1,6 @@
 package com.example.petabencana.presentation.ui.reports
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,16 +10,22 @@ import com.example.petabencana.databinding.CardReportBinding
 import com.example.petabencana.domain.models.Report
 import com.example.petabencana.utils.extensions.DateTimeFormat
 
-class ReportsAdapter(private val list: List<Report>) : RecyclerView.Adapter<ReportsAdapter.ItemViewHolder>() {
+class ReportsAdapter(private val context: Context, private val list: List<Report>) :
+    RecyclerView.Adapter<ReportsAdapter.ItemViewHolder>() {
 
-    inner class ItemViewHolder(private val binding : CardReportBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(report: Report){
+    inner class ItemViewHolder(private val binding: CardReportBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(report: Report) {
             binding.newsTitle.text = report.properties.title ?: "Bencana : -"
             binding.newsDescription.text = report.properties.text
-            binding.reportDate.text = DateTimeFormat().convertDate(report.properties.createdAt)
-            if(report.properties.imageURL.isNullOrEmpty()){
+            binding.reportDate.text =
+                context.getString(
+                    R.string.date_time,
+                    DateTimeFormat().convertDate(report.properties.createdAt)
+                )
+            if (report.properties.imageURL.isNullOrEmpty()) {
                 binding.newsImage.setImageResource(R.drawable.no_image)
-            }else{
+            } else {
                 Glide.with(binding.root).load(report.properties.imageURL).into(binding.newsImage)
             }
 

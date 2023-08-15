@@ -17,7 +17,7 @@
             android:layout_height="match_parent" />
 
 
-        <com.google.android.material.textfield.TextInputEditText
+        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
             android:id="@+id/autoCompleteTextView"
             android:layout_width="0dp"
             android:drawableStart="@drawable/search_icon"

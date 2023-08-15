@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -69,10 +70,17 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
             view.findNavController().navigate(action)
         }
 
+        _binding.autoCompleteTextView.setAdapter(
+            ArrayAdapter(
+                requireActivity(),
+                R.layout.item_suggestion,
+                R.id.textView_suggestion,
+                resources.getStringArray(R.array.province)
+            )
+        )
         _binding.autoCompleteTextView.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE && textView.text.isNotEmpty()) {
-                val text = _binding.autoCompleteTextView.text.toString()
-                province = text
+                province = textView.text.toString()
                 val keyboard = requireActivity().getSystemService(InputMethodManager::class.java)
                 keyboard.hideSoftInputFromWindow(textView.windowToken, 0)
 
@@ -99,7 +107,7 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
         }
         viewModel.reports.observe(viewLifecycleOwner) {
 
-            val listAdapter = ReportsAdapter(it)
+            val listAdapter = ReportsAdapter(requireActivity(),it)
             val layout = LinearLayoutManager(requireActivity())
             _binding.newsList.apply {
                 adapter = listAdapter
@@ -199,6 +207,7 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
                         R.raw.map_style_dark
                     )
                 )
+
                 else -> gMaps.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(
                         requireActivity(),
@@ -210,24 +219,27 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
         viewModel.reports.observe(viewLifecycleOwner) {
             gMaps.clear()
 
-            val dataReport = it
-            if (_binding.autoCompleteTextView.text!!.isNotEmpty()) {
-                val coordinate = dataReport[0].geometry.coordinates
-                val positionFirsReport = LatLng(coordinate[1], coordinate[0])
-                gMaps.animateCamera(CameraUpdateFactory.newLatLngZoom(positionFirsReport, 8f))
-            }
-            for (report: Report in dataReport) {
-                val header = report.properties.disasterType
-                val position =
-                    LatLng(report.geometry.coordinates[1], report.geometry.coordinates[0])
+            if(!it.isNullOrEmpty()){
+                val dataReport = it
+                if (_binding.autoCompleteTextView.text!!.isNotEmpty()) {
+                    val coordinate = dataReport[0].geometry.coordinates
+                    val positionFirsReport = LatLng(coordinate[1], coordinate[0])
+                    gMaps.animateCamera(CameraUpdateFactory.newLatLngZoom(positionFirsReport, 10.0f))
+                }
+                for (report: Report in dataReport) {
+                    val header = report.properties.disasterType
+                    val position =
+                        LatLng(report.geometry.coordinates[1], report.geometry.coordinates[0])
 
-                val markerOpt = MarkerOptions()
-                    .position(position)
-                    .title(report.properties.title ?: "Bencana")
-                    .snippet(header)
+                    val markerOpt = MarkerOptions()
+                        .position(position)
+                        .title(report.properties.title ?: "Bencana")
+                        .snippet(header)
 
-                gMaps.addMarker(markerOpt)
+                    gMaps.addMarker(markerOpt)
+                }
             }
+
         }
 
     }
