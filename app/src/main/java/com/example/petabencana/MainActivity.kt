@@ -1,38 +1,45 @@
 package com.example.petabencana
 
-import android.content.pm.PackageManager
-import android.content.res.Resources
-import android.location.Location
 import android.os.Bundle
-import android.view.View
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.isVisible
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.petabencana.databinding.ActivityMainBinding
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.example.petabencana.presentation.ui.setting.SettingViewModel
+import com.example.petabencana.utils.helper.ThemeHelper
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var navController: NavController
+    private val viewModel: SettingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navigation_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+//        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        viewModel.isDarkTheme().observe(this) { isDarkMode ->
+            when (isDarkMode) {
+                true -> ThemeHelper.enableDarkTheme()
+                else -> ThemeHelper.disableDarkTheme()
+            }
+        }
+
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return findNavController(R.id.navigation_fragment).navigateUp()
+                || super.onSupportNavigateUp()
     }
 }
