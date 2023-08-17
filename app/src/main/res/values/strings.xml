@@ -4,6 +4,15 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="date_time"> %1$s WIB</string>
+    <string name="cari_daerah">Cari daerah ..</string>
+    <string name="semua">Semua</string>
+    <string name="banjir">Banjir</string>
+    <string name="gempa_bumi">Gempa Bumi</string>
+    <string name="kebakaran">Kebakaran</string>
+    <string name="kabut">Kabut</string>
+    <string name="angin">Angin</string>
+    <string name="gunung_berapi">Gunung Berapi</string>
+    <string name="informasi_bencana_terkini">Informasi Bencana Terkini</string>
 
     <array name="province">
         <item>Aceh</item>
