@@ -12,16 +12,18 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.RadioButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petabencana.R
-import com.example.petabencana.data.datasource.local.ThemePreferences
 import com.example.petabencana.databinding.FragmentReportsBinding
 import com.example.petabencana.domain.models.Report
+import com.example.petabencana.domain.repository.ReportState
 import com.example.petabencana.presentation.ui.setting.SettingViewModel
+import com.example.petabencana.utils.helper.DisasterTypeHelper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -31,19 +33,21 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.R.layout.support_simple_spinner_dropdown_item
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReportsFragment : Fragment(), OnMapReadyCallback {
     private val viewModel: ReportsViewModel by viewModels()
-    private val settingViewModel: SettingViewModel by viewModels<SettingViewModel> {
-        SettingViewModel.factory(ThemePreferences(requireActivity()))
-    }
+    private val settingViewModel: SettingViewModel by viewModels()
     private lateinit var _binding: FragmentReportsBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var gMaps: GoogleMap
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
 
-    private var province: String? = null
+    private var provinceId: String? = null
+    private var disasterType: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,45 +77,50 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
         _binding.autoCompleteTextView.setAdapter(
             ArrayAdapter(
                 requireActivity(),
-                R.layout.item_suggestion,
-                R.id.textView_suggestion,
+                support_simple_spinner_dropdown_item,
                 resources.getStringArray(R.array.province)
             )
         )
         _binding.autoCompleteTextView.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE && textView.text.isNotEmpty()) {
-                province = textView.text.toString()
+                provinceId = textView.text.toString()
                 val keyboard = requireActivity().getSystemService(InputMethodManager::class.java)
                 keyboard.hideSoftInputFromWindow(textView.windowToken, 0)
 
-                viewModel.getReports(province)
+                viewModel.getReports(provinceId, disasterType)
 
                 return@setOnEditorActionListener true
             }
             return@setOnEditorActionListener false
         }
 
-
-
-
-        viewModel.status.observe(viewLifecycleOwner) {
-            when (it) {
-                ReportApiStatus.LOADING -> {
-                    _binding.progressCircular.visibility = View.VISIBLE
-                }
-
-                else -> {
+        viewModel.reports.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                ReportState.Loading -> _binding.progressCircular.visibility = View.VISIBLE
+                is ReportState.Error -> _binding.progressCircular.visibility = View.GONE
+                is ReportState.Finished -> {
                     _binding.progressCircular.visibility = View.GONE
+                    val listAdapter = ReportsAdapter(requireActivity(), state.data)
+                    val layout = LinearLayoutManager(requireActivity())
+                    _binding.newsList.apply {
+                        adapter = listAdapter
+                        layoutManager = layout
+                    }
                 }
             }
         }
-        viewModel.reports.observe(viewLifecycleOwner) {
 
-            val listAdapter = ReportsAdapter(requireActivity(),it)
-            val layout = LinearLayoutManager(requireActivity())
-            _binding.newsList.apply {
-                adapter = listAdapter
-                layoutManager = layout
+        _binding.radioGroupReport.apply {
+            check(_binding.radioButtonAll.id)
+            setOnCheckedChangeListener { _, checkedId ->
+                val radioButton = findViewById<RadioButton>(checkedId)
+                val selectedType = radioButton.text
+                disasterType = if (radioButton.id == R.id.radioButtonAll) {
+                    null
+                } else {
+                    DisasterTypeHelper.getDisasterTypewithEnum(selectedType.toString())
+                }
+                viewModel.getReports(provinceId, disasterType)
             }
         }
 
@@ -216,31 +225,40 @@ class ReportsFragment : Fragment(), OnMapReadyCallback {
                 )
             }
         }
-        viewModel.reports.observe(viewLifecycleOwner) {
+
+        viewModel.reports.observe(viewLifecycleOwner) { state ->
             gMaps.clear()
+            when (state) {
+                is ReportState.Finished -> {
+                    val dataReport = state.data
+                    if (_binding.autoCompleteTextView.text!!.isNotEmpty() && dataReport.isNotEmpty()) {
+                        val coordinate = dataReport[0].geometry.coordinates
+                        val positionFirsReport = LatLng(coordinate[1], coordinate[0])
+                        gMaps.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                positionFirsReport,
+                                10.0f
+                            )
+                        )
+                    }
+                    for (report: Report in dataReport) {
+                        val header = report.properties.disasterType
+                        val position =
+                            LatLng(report.geometry.coordinates[1], report.geometry.coordinates[0])
 
-            if(!it.isNullOrEmpty()){
-                val dataReport = it
-                if (_binding.autoCompleteTextView.text!!.isNotEmpty()) {
-                    val coordinate = dataReport[0].geometry.coordinates
-                    val positionFirsReport = LatLng(coordinate[1], coordinate[0])
-                    gMaps.animateCamera(CameraUpdateFactory.newLatLngZoom(positionFirsReport, 10.0f))
+                        val markerOpt = MarkerOptions()
+                            .position(position)
+                            .title(report.properties.title ?: "Bencana")
+                            .snippet(header)
+
+                        gMaps.addMarker(markerOpt)
+                    }
                 }
-                for (report: Report in dataReport) {
-                    val header = report.properties.disasterType
-                    val position =
-                        LatLng(report.geometry.coordinates[1], report.geometry.coordinates[0])
 
-                    val markerOpt = MarkerOptions()
-                        .position(position)
-                        .title(report.properties.title ?: "Bencana")
-                        .snippet(header)
-
-                    gMaps.addMarker(markerOpt)
-                }
+                else -> {}
             }
-
         }
+
 
     }
 

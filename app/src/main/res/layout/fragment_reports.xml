@@ -34,7 +34,7 @@
             android:background="@drawable/bg_search_view"
             android:inputType="text"
         android:imeOptions="actionDone"
-            android:hint="Cari daerah .."
+            android:hint="@string/cari_daerah"
             />
 
         <ImageView
@@ -47,7 +47,79 @@
             android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/autoCompleteTextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/autoCompleteTextView" />
+            app:layout_constraintTop_toTopOf="@+id/autoCompleteTextView"
+            android:importantForAccessibility="no" />
+
+        <HorizontalScrollView
+            android:id="@+id/hsFilter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/autoCompleteTextView">
+
+
+            <RadioGroup
+                android:id="@+id/radioGroupReport"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioButtonAll"
+                    style="@style/CustomRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    tools:checked="true"
+                    android:text="@string/semua" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonFlood"
+                    style="@style/CustomRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/banjir" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonEarthquake"
+                    style="@style/CustomRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gempa_bumi" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonFire"
+                    style="@style/CustomRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kebakaran" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonHaze"
+                    style="@style/CustomRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/kabut" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonWind"
+                    style="@style/CustomRadio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/angin" />
+
+                <RadioButton
+                    android:id="@+id/radioButtonVolcano"
+                    style="@style/CustomRadio"
+                    android:layout_marginEnd="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gunung_berapi" />
+            </RadioGroup>
+        </HorizontalScrollView>
 
         <ProgressBar
             android:id="@+id/progress_circular"
@@ -100,14 +172,15 @@
                 app:layout_constraintBottom_toBottomOf="@+id/textviewOffset"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/arrow_up_icon"
-                tools:visibility="visible" />
+                tools:visibility="visible"
+                android:importantForAccessibility="no" />
 
             <TextView
                 android:id="@+id/textviewOffset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="10dp"
-                android:text="Informasi Bencana Terkini"
+                android:text="@string/informasi_bencana_terkini"
                 android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@id/close_icon"
                 app:layout_constraintTop_toBottomOf="@id/arrow_up_icon" />

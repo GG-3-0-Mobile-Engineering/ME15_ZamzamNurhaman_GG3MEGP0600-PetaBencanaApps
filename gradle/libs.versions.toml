@@ -29,6 +29,9 @@ androidx-navigationUi = "2.7.0"
 glide = "4.15.1"
 datastore = "1.1.0-alpha04"
 datastorePreferences = "1.1.0-alpha04"
+hiltAndroid = "2.47"
+hiltCompiler = "2.47"
+hiltAndroidCompiler = "2.47"
 
 [libraries]
 androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation-fragment" }
@@ -59,6 +62,9 @@ androidx-navigation-ui = { group = "androidx.navigation", name = "navigation-ui"
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroid" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hiltCompiler" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

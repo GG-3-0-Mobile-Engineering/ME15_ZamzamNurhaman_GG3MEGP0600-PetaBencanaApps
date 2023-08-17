@@ -6,18 +6,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import com.example.petabencana.data.datasource.local.ThemePreferences
 import com.example.petabencana.databinding.ActivityMainBinding
 import com.example.petabencana.presentation.ui.setting.SettingViewModel
 import com.example.petabencana.utils.helper.ThemeHelper
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private val viewModel: SettingViewModel by viewModels<SettingViewModel> {
-        SettingViewModel.factory(ThemePreferences(this))
-    }
+    private val viewModel: SettingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
